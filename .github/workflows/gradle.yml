@@ -81,7 +81,6 @@ jobs:
         timeout: 60s
         script: |
           docker pull ${{secrets.DOCKERHUB_USERNAME}}/web-ide
-          ls -al
           docker compose down
           docker compose up -d
 
