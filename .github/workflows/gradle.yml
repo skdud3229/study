@@ -56,7 +56,7 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_PASSWORD }}
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag web-ide:$(date +%s)
+      run: docker build . --tag ${{ secrets.DOCKERHUB_USERNAME }}/web-ide:$(date +%s)
     - name: Push the Docker image
       run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/web-ide
 
