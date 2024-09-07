@@ -16,7 +16,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     permissions:
       contents: read
 
@@ -37,6 +37,7 @@ jobs:
       run: |
         chmod +x ./gradlew
         ./gradlew build --exclude-task test
+        
 
     # NOTE: The Gradle Wrapper is the default and recommended way to run Gradle (https://docs.gradle.org/current/userguide/gradle_wrapper.html).
     # If your project does not have the Gradle Wrapper configured, you can use the following configuration to run Gradle with a specified version.
@@ -49,9 +50,43 @@ jobs:
     # - name: Build with Gradle 8.9
     #   run: gradle build
 
-  dependency-submission:
+    - name: Docker Login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+    - name: Build the Docker image
+      run: docker build . --tag ${{ secrets.DOCKERHUB_USERNAME }}/web-ide
+    - name: Push the Docker image
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/web-ide
 
-    runs-on: ubuntu-latest
+    - name: Copy jar and Docker Compose files to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        HOST_NAME: ${{ secrets.EC2_HOST_NAME }}
+        USER_NAME: ${{ secrets.EC2_USER_NAME }}
+      run: |
+        echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
+        scp -i private_key -o StrictHostKeyChecking=no ./build/libs/*.jar ${USER_NAME}@${HOST_NAME}:~/build/libs
+        scp -i private_key -o StrictHostKeyChecking=no ./nginx/*.conf ${USER_NAME}@${HOST_NAME}:~/nginx
+        scp -i private_key -o StrictHostKeyChecking=no ./docker-compose.yml ${USER_NAME}@${HOST_NAME}:~/docker-compose.yml
+
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.6
+      with:
+        host: ${{ secrets.EC2_HOST_NAME }}
+        username:  ${{ secrets.EC2_USER_NAME }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+        port: 22
+        timeout: 60s
+        script: |
+          docker pull ${{secrets.DOCKERHUB_USERNAME}}/web-ide
+          docker compose down
+          docker compose up -d
+
+
+  dependency-submission:
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
 
