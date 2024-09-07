@@ -75,7 +75,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.6
       with:
         host: ${{ secrets.EC2_HOST_NAME }}
-        username:  ${{ secrets.EC2_HOST_NAME }}
+        username:  ${{ secrets.EC2_USER_NAME }}
         key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         port: 22
         timeout: 60s
