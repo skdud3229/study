@@ -79,9 +79,9 @@ jobs:
       run: |
         ssh -i private_key -o StrictHostKeyChecking=no ${USER_NAME}@${HOST_NAME} 
         cd ~
+        ls -al
         sudo docker pull ${{secrets.DOCKERHUB_USERNAME}}/web-ide
         sudo docker compose down
-        ls
         sudo docker compose up -d
 
 
