@@ -67,8 +67,8 @@ jobs:
         USER_NAME: ${{ secrets.EC2_USER_NAME }}
       run: |
         echo "$PRIVATE_KEY" > private_key && chmod 600 private_key
-        scp -i private_key -o StrictHostKeyChecking=no ./build/libs/*.jar ${USER_NAME}@${HOST_NAME}:~/build/libs
-        scp -i private_key -o StrictHostKeyChecking=no ./nginx/*.conf ${USER_NAME}@${HOST_NAME}:~/nginx
+        scp -i private_key -o StrictHostKeyChecking=no ./build/libs/*.jar ${USER_NAME}@${HOST_NAME}:~/build/libs/
+        scp -i private_key -o StrictHostKeyChecking=no ./nginx/*.conf ${USER_NAME}@${HOST_NAME}:~/nginx/
         scp -i private_key -o StrictHostKeyChecking=no ./docker-compose.yml ${USER_NAME}@${HOST_NAME}:~/docker-compose.yml
 
     - name: Deploy to EC2
