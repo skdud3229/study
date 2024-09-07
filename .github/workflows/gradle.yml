@@ -72,15 +72,11 @@ jobs:
         scp -i private_key -o StrictHostKeyChecking=no ./docker-compose.yml ${USER_NAME}@${HOST_NAME}:~/docker-compose.yml
 
     - name: Deploy to EC2
-      env:
-        PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-        HOST_NAME: ${{ secrets.EC2_HOST_NAME }}
-        USER_NAME: ${{ secrets.EC2_USER_NAME }}
       uses: appleboy/ssh-action@v0.1.6
       with:
-        host: ${{HOST_NAME}}
-        username: ${{USER_NAME}}
-        key: ${{PRIVATE_KEY}}
+        host: ${{ secrets.EC2_HOST_NAME }}
+        username:  ${{ secrets.EC2_HOST_NAME }}
+        key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
         port: 22
         timeout: 60s
         script: |
