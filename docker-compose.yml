@@ -11,7 +11,7 @@ services:
       - "3307:3306"
 
   app:
-    image: skdud3229/web-ide
+    image: ${DOCKERHUB_USERNAME}/web-ide
     container_name: web_ide
     ports:
       - "8080:8080"
