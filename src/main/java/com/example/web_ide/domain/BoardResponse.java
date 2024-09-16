@@ -3,9 +3,6 @@ package com.example.web_ide.domain;
 import com.example.web_ide.domain.dao.Board;
 import lombok.Builder;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 import static com.example.web_ide.util.TimeToString.localDateTimeToString;
 
 @Builder

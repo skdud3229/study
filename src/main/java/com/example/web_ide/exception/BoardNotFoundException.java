@@ -1,6 +1,5 @@
 package com.example.web_ide.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 public class BoardNotFoundException extends BaseException {

@@ -1,7 +1,6 @@
 package com.example.web_ide.domain.dao;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
