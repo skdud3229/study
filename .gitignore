@@ -6,6 +6,7 @@ build/
 !**/src/test/**/build/
 .env
 mysql-data/
+nGrinder/
 
 ### STS ###
 .apt_generated

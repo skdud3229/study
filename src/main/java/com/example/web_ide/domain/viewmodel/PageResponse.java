@@ -1,4 +1,4 @@
-package com.example.web_ide.domain;
+package com.example.web_ide.domain.viewmodel;
 
 import lombok.Builder;
 import org.springframework.data.domain.Page;

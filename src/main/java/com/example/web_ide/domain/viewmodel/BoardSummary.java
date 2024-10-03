@@ -1,4 +1,4 @@
-package com.example.web_ide.domain;
+package com.example.web_ide.domain.viewmodel;
 import com.example.web_ide.domain.dao.Board;
 import lombok.Builder;
 

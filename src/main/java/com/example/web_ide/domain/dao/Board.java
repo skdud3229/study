@@ -1,10 +1,13 @@
 package com.example.web_ide.domain.dao;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -40,12 +43,26 @@ public class Board {
 
     private String contents;
 
-    @CreatedDate
-    @Column(updatable = false)
+    /*
+    views,likes,dislikes는 redis(mem-cached)를 사용하고 db에 60초 간격으로 업데이트하도록 스케줄한다.
+     */
+
+    private Long views;
+
+
+    private Boolean isPrivate;
+
+    @CreationTimestamp
     private LocalDateTime createdTime; //timestamp는 java.util.date를 상속하며 mutable한 객체이므로 java.time의 local date time을 사용
 
-    @LastModifiedDate
+    @UpdateTimestamp
     private LocalDateTime updatedTime;
+
+    @PrePersist
+    public void prePersist(){
+        this.views=0L;
+        this.isPrivate=false;
+    }
 
     public void update(String title,String contents){
         this.title=title;
